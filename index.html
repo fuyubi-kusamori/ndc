@@ -98,11 +98,25 @@ body::before {
   font-size: clamp(3.5rem, 12vw, 6rem);
   letter-spacing: 0.1em;
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* 説明文との間隔を調整 */
   text-shadow: 0 2px 20px rgba(0,0,0,0.2);
 }
 
-/* ★ ADD: 知の羅針盤 (検索機能) --- */
+/* ★ ADD: ページ説明文 --- */
+.page-description {
+  max-width: 65ch;
+  margin: 0 auto 2.5rem;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: 1.8;
+  padding: 0 1rem;
+}
+.page-description p {
+    margin: 0.5em 0;
+}
+
+/* --- 知の羅針盤 (検索機能) --- */
 .search-container {
   max-width: 800px;
   margin: 0 auto 2.5rem;
@@ -142,7 +156,7 @@ body::before {
   margin: 0 auto;
 }
 
-/* ★ ADD: Staggered Animation */
+/* Staggered Animation */
 .accordion-item {
   opacity: 0;
   transform: translateY(20px);
@@ -227,7 +241,7 @@ body::before {
   padding: 0 1.5rem 1.5rem 1.5rem;
 }
 
-/* ★ ADD: 検索ハイライト */
+/* 検索ハイライト */
 .highlight {
   background-color: var(--highlight-bg);
   color: var(--highlight-text);
@@ -236,16 +250,16 @@ body::before {
   font-weight: 500;
 }
 
-/* ★ ADD: 検索結果なしメッセージ */
+/* 検索結果なしメッセージ */
 #no-results-message {
   text-align: center;
   padding: 2rem;
   font-size: 1.1rem;
   color: var(--color-text-muted);
-  display: none; /* JSで制御 */
+  display: none;
 }
 
-/* ★ ADD: ミュートボタン */
+/* ミュートボタン */
 .mute-toggle-btn {
   position: fixed;
   bottom: 20px;
@@ -280,7 +294,7 @@ body::before {
   display: none;
 }
 
-/* ★ ADD: スクリーンリーダー用 */
+/* スクリーンリーダー用 */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -300,9 +314,15 @@ body::before {
 
 <h1 class="main-title">NDC</h1>
 
+<!-- ★ ADD: 説明文 -->
+<div class="page-description">
+  <p>NDC（日本十進分類法）は、図書館で本をテーマ別に分類するための番号です。</p>
+  <p>キーワード（例：「哲学」「建築」「詩歌」）で分類を探索したり、各項目を開いて詳細を確認できます。</p>
+</div>
+
 <div class="search-container">
   <label for="search-input" class="visually-hidden">アーカイブを探索</label>
-  <input type="search" id="search-input" placeholder="アーカイブを探索… (例: 哲学, 建築, 詩歌)">
+  <input type="search" id="search-input" placeholder="アーカイブを探索…">
   <div id="search-results-status" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
 </div>
 
@@ -428,9 +448,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     
     let isMuted = localStorage.getItem('ndc_isMuted') === 'true';
-    const clickSound = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+Array(300).join('A')); // 短い無音から始める
-    // 上品なクリック音のBase64データ
-    const soundData = 'data:audio/wav;base64,UklGRigBAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQBAAD//v/6//r/+v/5//j/+P/5//n/+v/7//z//f/9//7//P/8//z//P/9//3//f/9//3//f/9//3//f/9//3//f/9//7//P/8//v/+v/6//r/+f/5//j/+f/5//r/+f/4//f/9v/z//H/8P/v/+3/7f/t/+3/7P/r/+r/6v/r/+r/6f/p/+n/6f/p/+n/6f/o/+j/6P/o/+j/5//o/+f/6P/p/+n/6f/p/+n/6v/r/+z/7f/u/+7/8P/y//T/9v/4//r//P/9//7//v/8//v/+f/3//L/8P/s/+f/4//c/9f/0v/Q/8//zP/L/8r/yv/L/8v/yv/K/8n/yP/H/8f/yP/I/8j/yP/J/8r/y//N/8//0v/U/9f/2f/b/93/3//h/+X/6f/s/+7/8P/z//X/9v/3//j/+f/6//r/+v/7//r/+v/6//v/+f/4//f/9v/1//P/8f/w/+7/7P/q/+j/5//l/+T/4//j/+L/4f/g/+D/4P/f/9//3//f/9//3v/d/93/3v/e/9//4P/h/+P/5P/m/+f/6P/q/+v/7P/t/+3/7P/t/+3/7f/u/+7/7v/u/+7/7f/t/+3/7f/t/+3/7f/t/+3/7Q==';
+    const clickSound = new Audio();
+    const soundData = 'data:audio/wav;base64,UklGRigBAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQBAAD//v/6//r/+v/5//j/+P/5//n/+v/7//z//f/9//7//P/8//z//P/9//3//f/9//3//f/9//3//f/9//3//f/9//7//P/8//v/+v/6//r/+f/5//j/+f/5//r/+f/4//f/9v/z//H/8P/v/+3/7f/t/+3/7P/r/+r/6v/r/+r/6f/p/+n/6f/p/+n/6f/o/+j/6P/o/+j/6f/o/+f/6P/p/+n/6f/p/+n/6v/r/+z/7f/u/+7/8P/y//T/9v/4//r//P/9//7//v/8//v/+f/3//L/8P/s/+f/4//c/9f/0v/Q/8//zP/L/8r/yv/L/8v/yv/K/8n/yP/H/8f/yP/I/8j/yP/J/8r/y//N/8//0v/U/9f/2f/b/93/3//h/+X/6f/s/+7/8P/z//X/9v/3//j/+f/6//r/+v/7//r/+v/6//v/+f/4//f/9v/1//P/8f/w/+7/7P/q/+j/5//l/+T/4//j/+L/4f/g/+D/4P/f/9//3//f/9//3v/d/93/3v/e/9//4P/h/+P/5P/m/+f/6P/q/+v/7P/t/+3/7P/t/+3/7f/u/+7/7v/u/+7/7f/t/+3/7f/t/+3/7f/t/+3/7Q==';
     clickSound.src = soundData;
 
     const accordionContainer = document.getElementById('accordion-container');
@@ -444,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function playSound() {
         if (!isMuted) {
             clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.error("Sound play failed:", e));
+            clickSound.play().catch(e => {});
         }
     }
 
@@ -454,11 +473,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const label = isMuted ? "サウンドをオンにする" : "サウンドをオフにする";
         muteBtn.setAttribute('aria-label', label);
         localStorage.setItem('ndc_isMuted', isMuted);
-        playSound(); // 状態変更を音でフィードバック
+        if(!isMuted) playSound();
     }
     
     function createAccordionItem(itemData, index) {
-        if (!itemData.content.trim()) return null; // コンテンツが空の項目はスキップ
+        if (!itemData.content.trim()) return null;
         
         const details = document.createElement('details');
         details.className = 'accordion-item';
@@ -497,26 +516,44 @@ document.addEventListener('DOMContentLoaded', () => {
         if (details.open) return;
         playSound();
         details.open = true;
-        window.location.hash = details.id.replace('item-', '');
         
         const wrapper = details.querySelector('.content-wrapper');
+        const endHeight = wrapper.scrollHeight;
         wrapper.style.gridTemplateRows = '1fr';
+
+        const animation = wrapper.animate([
+            { gridTemplateRows: '0fr' },
+            { gridTemplateRows: '1fr' }
+        ], {
+            duration: 500,
+            easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)'
+        });
+        
+        animation.onfinish = () => {
+            history.pushState(null, '', `#${details.id.replace('item-', '')}`);
+        };
     }
 
     function closeAccordion(details) {
         if (!details.open) return;
         playSound();
         const wrapper = details.querySelector('.content-wrapper');
-        wrapper.style.gridTemplateRows = '0fr';
+        const startHeight = wrapper.scrollHeight;
         
-        // アニメーション終了後に閉じる
-        setTimeout(() => {
+        const animation = wrapper.animate([
+            { gridTemplateRows: '1fr' },
+            { gridTemplateRows: '0fr' }
+        ], {
+            duration: 500,
+            easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)'
+        });
+        
+        animation.onfinish = () => {
             details.open = false;
-        }, 500);
-
-        if (window.location.hash === `#${details.id.replace('item-', '')}`) {
-            history.pushState("", document.title, window.location.pathname + window.location.search);
-        }
+            if (window.location.hash === `#${details.id.replace('item-', '')}`) {
+                history.pushState("", document.title, window.location.pathname + window.location.search);
+            }
+        };
     }
 
     function handleFilter() {
@@ -530,13 +567,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalTitle = titleElement.dataset.originalText || titleElement.textContent;
             const originalContent = contentElement.dataset.originalText || contentElement.innerHTML;
 
-            // 元のテキストを保存
-            if (!titleElement.dataset.originalText) {
-                titleElement.dataset.originalText = originalTitle;
-            }
-            if (!contentElement.dataset.originalText) {
-                contentElement.dataset.originalText = originalContent;
-            }
+            if (!titleElement.dataset.originalText) titleElement.dataset.originalText = originalTitle;
+            if (!contentElement.dataset.originalText) contentElement.dataset.originalText = originalContent;
 
             const itemText = (originalTitle + " " + contentElement.textContent).toLowerCase();
             
@@ -548,7 +580,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const regex = new RegExp(escapeRegExp(query), 'gi');
                     titleElement.innerHTML = originalTitle.replace(regex, `<mark class="highlight">$&</mark>`);
                     contentElement.innerHTML = originalContent.replace(regex, `<mark class="highlight">$&</mark>`);
-                    // 検索にヒットした項目は自動で開く
                     openAccordion(item);
                 } else {
                     titleElement.innerHTML = originalTitle;
@@ -577,31 +608,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetItem = document.getElementById(`item-${hash}`);
             if (targetItem) {
                 openAccordion(targetItem);
-                targetItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => {
+                    targetItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 500); // アニメーション後にスクロール
             }
         }
     }
 
-
     // --- 3. 初期化処理 ---
 
-    // ミュートボタンの初期状態設定
     muteBtn.classList.toggle('muted', isMuted);
     const initialLabel = isMuted ? "サウンドをオンにする" : "サウンドをオフにする";
     muteBtn.setAttribute('aria-label', initialLabel);
     
-    // アコーディオンアイテムを生成してコンテナに追加
     data.forEach((itemData, index) => {
         const itemElement = createAccordionItem(itemData, index);
         if(itemElement) accordionContainer.appendChild(itemElement);
     });
 
-    // イベントリスナーの設定
     searchInput.addEventListener('input', handleFilter);
     muteBtn.addEventListener('click', toggleMute);
     window.addEventListener('hashchange', handleHash);
 
-    // ページ読み込み時のハッシュ処理
     handleHash();
 });
 </script>
